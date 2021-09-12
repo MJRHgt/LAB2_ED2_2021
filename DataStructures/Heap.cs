@@ -16,27 +16,27 @@ namespace DataStructures
         /// <param name="Det_Prioridad">Delegado para determinar cual prioridad es mayor</param>
         public void Agregar(T valor, Delegate Det_Prioridad)
         {
-            Nodo<T> nod_nuevo = new Nodo<T>();
-            nod_nuevo.Valor = valor;
+            Nodo<T> nod_New = new Nodo<T>();
+            nod_New.Valor = valor;
             Cant_Nodos++;
             if (raiz == null)
             {
-                raiz = nod_nuevo;
+                raiz = nod_New;
                 raiz.Padre = null;
             }
             else
             {
-                Realizar_Recorrido(nod_nuevo);
-                intercambiar_valor_padre(nod_nuevo, Det_Prioridad);
+                Realizar_Recorrido(nod_New);
+                intercambiar_valor_padre(nod_New, Det_Prioridad);
             }
         }
 
         /// <summary>
         /// Metodo para encontrar la posición donde se coloca el siguiente nodo (forma invariante)
-        /// Segun la cantidad de nodos que posea la cola
+        /// Segun la cantidad de nodos que posea la Line
         /// </summary>
-        /// <param name="Nuevo">Valor que se agregara</param>
-        private void Realizar_Recorrido(Nodo<T> Nuevo)
+        /// <param name="New">Valor que se agregara</param>
+        private void Realizar_Recorrido(Nodo<T> New)
         {
             Nodo<T> Guia = raiz;
             string bin = Binario_Conver();
@@ -46,8 +46,8 @@ namespace DataStructures
                 {
                     if (Guia.Hijoizq == null)
                     {
-                        Guia.Hijoizq = Nuevo;
-                        Nuevo.Padre = Guia;
+                        Guia.Hijoizq = New;
+                        New.Padre = Guia;
                     }
                     else
                     {
@@ -58,8 +58,8 @@ namespace DataStructures
                 {
                     if (Guia.Hijoder == null)
                     {
-                        Guia.Hijoder = Nuevo;
-                        Nuevo.Padre = Guia;
+                        Guia.Hijoder = New;
+                        New.Padre = Guia;
                     }
                     else
                     {
@@ -100,9 +100,9 @@ namespace DataStructures
             if (raiz != null)
             {
                 aux = raiz.Valor;
-                Nodo<T> cola = Encontrar_ultimo_nodo();
-                raiz.Valor = cola.Valor;
-                borrar_ult_nodo(cola, Comparar_Val);
+                Nodo<T> Line = Encontrar_ultimo_nodo();
+                raiz.Valor = Line.Valor;
+                borrar_ult_nodo(Line, Comparar_Val);
                 if (raiz != null) { intercambiar_valor_hijo(raiz, Comparar, Det_prioridad); }
                 Cant_Nodos--;
             }
