@@ -4,5 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Compressed\" />
+    <Folder Include="Decompressed\" />
+    <Folder Include="Temp\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompressionsLibrary\CompressionsLibrary.csproj" />
+  </ItemGroup>
+
 
 </Project>
