@@ -11,7 +11,7 @@ namespace ConsoleAppLAB2
         public static void Header()
         {
             Console.Clear();
-            string textToEnter = "--PRÁCTICA DE LABORATORIO #3 - ESTRUCTURA DE DATOS 2--";
+            string textToEnter = "--PRÁCTICA DE LABORATORIO #2 - ESTRUCTURA DE DATOS 2--";
             string textToEnter2 = "----- Javier Andrés Morales González - 1210219 | Mario Jose Roldan  Hernandez - 1117517 -----";
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (textToEnter.Length / 2)) + "}", textToEnter));
