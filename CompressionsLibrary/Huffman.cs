@@ -255,7 +255,102 @@ namespace CompressionsLibrary
             return Comprimido;
         }
 
-//to insert descompresion, binary, and ascii methods
+        public byte[] Descompression(byte[] Text)
+        {
+            Table_Decompres = new Dictionary<string, Record>();
+            Compres = false;
+            byte[] Txt_Comprimido = Get_Data(Text);
+            Create_tree();
+            Add_prefixs(Line.raiz.Valor);
+            return Get_OriginalText(Convert_Binario(Txt_Comprimido));
+        }
+
+        private byte[] Get_Data(byte[] txt)
+        {
+            Line = new Heap<Record>();
+            List<Record> List_aux = new List<Record>();
+            Record Nuevo;
+            int Total = 0;
+            byte[] datos = txt;
+            int Cant_Caract = Convert.ToInt32(Convert.ToChar(datos[0]));
+            int Tam_BFrec = Convert.ToInt32(datos[1]);
+            int posicion = 2;
+            for (int i = 0; i < Cant_Caract; i++)
+            {
+                Nuevo = new Record();
+                Nuevo.symbol = datos[posicion++];
+                Nuevo.apparition_account = Convert.ToInt32(datos[posicion++]);
+                for (int j = 2; j <= Tam_BFrec; j++)
+                {
+                    if (datos[posicion] != 32)
+                    {
+                        Nuevo.apparition_account += 256;
+                    }
+                    posicion++;
+                }
+                List_aux.Add(Nuevo);
+                Total += Nuevo.apparition_account;
+            }
+            foreach (Record Item in List_aux)
+            {
+                Item.probability = Convert.ToDouble(Item.apparition_account) / Convert.ToDouble(Total);
+                Line.Agregar(Item, Record.Determinar_Prioridad);
+            }
+            Tam_Original = Total;
+            byte[] Data_retorna = new byte[datos.Length - posicion];
+            Array.Copy(datos, posicion, Data_retorna, 0, Data_retorna.Length);
+            return Data_retorna;
+        }
+
+
+        private string Convert_Binario(byte[] txt)
+        {
+            byte[] texto = txt;
+            string txt_binario = "";
+            string caract_binario = "";
+            foreach (byte Caract in texto)
+            {
+                caract_binario = Convert.ToString(Convert.ToInt32(Caract), 2);
+                while (caract_binario.Length < 8)
+                {
+                    caract_binario = "0" + caract_binario;
+                }
+                txt_binario += caract_binario;
+            }
+            return txt_binario;
+        }
+
+        private byte[] Get_OriginalText(string text)
+        {
+            string data_binaria = text;
+            byte[] Resultado = new byte[Tam_Original];
+            string aux = "";
+            int pos = 0;
+            for (int i = 0; i < Tam_Original; i++)
+            {
+                aux = Convert.ToString(data_binaria[pos]);
+                while (!Table_Decompres.ContainsKey(aux))
+                {
+                    pos++;
+                    aux += Convert.ToString(data_binaria[pos]);
+                }
+                Resultado[i] = Table_Decompres[aux].symbol;
+                pos++;
+            }
+            return Resultado;
+        }
+
+        /// <summary>
+        /// Metodo que devuelve los valores de compresión
+        /// </summary>
+        /// <returns>[0] Razón compresión, [1] Factor Compresión, [2] Porcentaje Reduccion</returns>
+        public double[] Datos_Compresion()
+        {
+            double razon_compresion = Convert.ToDouble(Tam_Compress) / Convert.ToDouble(Tam_Original);
+            double Factor_Compresion = Convert.ToDouble(Tam_Original) / Convert.ToDouble(Tam_Compress);
+            double Porcentaje_Reduccion = 100 * (Convert.ToDouble((Tam_Original - Tam_Compress)) / Convert.ToDouble(Tam_Original));
+            return new double[3] { razon_compresion, Factor_Compresion, Porcentaje_Reduccion };
+        }
 
 
     }

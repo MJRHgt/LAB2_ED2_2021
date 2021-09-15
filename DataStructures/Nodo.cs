@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    class Nodo<T>
+    public class Nodo<T>
     {
         public Nodo<T> Padre;
         public Nodo<T> Hijoizq;

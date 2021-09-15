@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    class Heap<T>
+    public class Heap<T>
     {
         public Nodo<T> raiz;
         public int Cant_Nodos;
