@@ -39,7 +39,7 @@ namespace CompressionsLibrary
 
         public void WriteRegistry(string OriginalName, string CompressedFilePath, double CompressionRatio, double CompressionFactor, double ReductionPercentage)
         {
-            string path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\") + "\\LAB-03-ED2-URL\\test.json");
+            string path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\..\\") + "\\LAB2\\test.json");
             using (var reader = new StreamReader(path))
             {
                 JsonSerializerOptions rule = new JsonSerializerOptions { IgnoreNullValues = true };

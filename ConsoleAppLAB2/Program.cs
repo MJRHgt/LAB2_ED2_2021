@@ -61,7 +61,7 @@ namespace ConsoleAppLAB2
                     {
                         texto[i] = Convert.ToByte(Convert.ToChar(Text[i]));
                     }
-                    byte[] Comprimido = CompresorCrack.Compresion(texto);
+                    byte[] Comprimido = CompresorCrack.Compression(texto);
                     string result = "";
                     foreach (byte bit in Comprimido)
                     {
@@ -79,7 +79,7 @@ namespace ConsoleAppLAB2
                     Header();
                     TitleOption2();
                     result = "";
-                    byte[] Descomprimido = CompresorCrack.Descompresion(Comprimido);
+                    byte[] Descomprimido = CompresorCrack.Descompression(Comprimido);
                     foreach (byte bit in Descomprimido)
                     {
                         result += Convert.ToString(Convert.ToChar(bit));
