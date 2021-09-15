@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CompressionsLibrary\CompressionsLibrary.csproj" />
     <ProjectReference Include="..\DataStructures\DataStructures.csproj" />
   </ItemGroup>
 
