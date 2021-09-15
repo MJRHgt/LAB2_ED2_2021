@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Compressed\" />
     <Folder Include="Decompressed\" />
     <Folder Include="Temp\" />
