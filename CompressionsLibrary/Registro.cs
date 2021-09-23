@@ -14,7 +14,31 @@ namespace CompressionsLibrary
         public Record left_son;
         public Record rigth_son;
 
-        public static Comparison<Record> Comparar_Prioridad = delegate (Record Symb1, Record Symb2)
+        //LZW
+
+        public byte[] Cadena;
+        public int Id;
+
+        public static bool Compardor_Bytes(byte[] Uno, byte[] Dos)
+        {
+            if (Uno.Length == Dos.Length)
+            {
+                for (int i = 0; i < Uno.Length; i++)
+                {
+                    if (Uno[i] != Dos[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    public static Comparison<Record> Comparar_Prioridad = delegate (Record Symb1, Record Symb2)
         {
             return Symb1.probability > Symb2.probability ? 1 : Symb1.probability < Symb2.probability ? -1 : 0;
         };
