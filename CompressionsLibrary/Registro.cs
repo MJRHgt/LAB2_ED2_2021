@@ -7,12 +7,15 @@ namespace CompressionsLibrary
 {
     class Record
     {
+        //Huffman 
+
         public byte symbol;
         public int apparition_account;
         public double probability;
         public string prefix;
         public Record left_son;
         public Record rigth_son;
+
 
         //LZW
 
@@ -38,7 +41,7 @@ namespace CompressionsLibrary
             }
         }
 
-    public static Comparison<Record> Comparar_Prioridad = delegate (Record Symb1, Record Symb2)
+        public static Comparison<Record> Comparar_Prioridad = delegate (Record Symb1, Record Symb2)
         {
             return Symb1.probability > Symb2.probability ? 1 : Symb1.probability < Symb2.probability ? -1 : 0;
         };
