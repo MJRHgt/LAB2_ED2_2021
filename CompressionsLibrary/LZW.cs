@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace CompressionsLibrary
 {
-    public class LZW : Compressor
+    public class LZW : ICompressor
     {
         Dictionary<byte[], Record> Tabla;
         Dictionary<int, Record> Tabla_Descompres;
@@ -175,7 +175,7 @@ namespace CompressionsLibrary
         /// <returns>Entrada de texto Descomprimida</returns>
         public byte[] Descompresion(byte[] CompressedText)
         {
-            Tabla_Descompres = new Dictionary<int, Registro>();
+            Tabla_Descompres = new Dictionary<int, Record>();
             byte Cant_Tabla = CompressedText[0];
             int posicion = Convert.ToInt32(Cant_Tabla);
             if (posicion == 0)
@@ -196,7 +196,7 @@ namespace CompressionsLibrary
         {
             for (int i = 1; i <= Final_PosTable; i++)
             {
-                Registro Nuevo = new Registro() { Cadena = new byte[1] };
+                Record Nuevo = new Record() { Cadena = new byte[1] };
                 Nuevo.Cadena[0] = Text_Compress[i];
                 Nuevo.Id = i;
                 Tabla_Descompres.Add(Nuevo.Id, Nuevo);
@@ -235,7 +235,7 @@ namespace CompressionsLibrary
 
                             if (!(anterior == -1))
                             {
-                                Registro Nuevo = new Registro();
+                                Record Nuevo = new Record();
                                 Nuevo.Cadena = Tabla_Descompres[anterior].Cadena;
                                 Array.Resize(ref Nuevo.Cadena, (Nuevo.Cadena.Length + 1));
                                 Nuevo.Cadena[Nuevo.Cadena.Length - 1] = Tabla_Descompres[aux].Cadena[0];
@@ -245,7 +245,7 @@ namespace CompressionsLibrary
                         }
                         else
                         {
-                            Registro Nuevo = new Registro();
+                            Record Nuevo = new Record();
                             Nuevo.Cadena = Tabla_Descompres[anterior].Cadena;
                             Array.Resize(ref Nuevo.Cadena, (Nuevo.Cadena.Length + 1));
                             Nuevo.Cadena[Nuevo.Cadena.Length - 1] = Tabla_Descompres[anterior].Cadena[0];
