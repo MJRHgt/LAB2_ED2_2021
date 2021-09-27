@@ -160,14 +160,121 @@ namespace CompressionsLibrary
             return Resultado;
         }
 
+
+
+
+
+
+
+
+
         /// <summary>
         ///  Implementación del Metodo de Descompresión de la Interfaz ICompressor
         /// </summary>
         /// <param name="CompressedText">Texto Comprimido</param>
         /// <returns>Entrada de texto Descomprimida</returns>
-        public byte[] Descompression(byte[] CompressedText)
+        public byte[] Descompresion(byte[] CompressedText)
         {
-            return null;   
+            Tabla_Descompres = new Dictionary<int, Registro>();
+            byte Cant_Tabla = CompressedText[0];
+            int posicion = Convert.ToInt32(Cant_Tabla);
+            if (posicion == 0)
+            {
+                posicion = 256;
+            }
+            Get_Tabla(CompressedText, posicion);
+            byte[] Result = Get_Text_Descompress(CompressedText, posicion + 1);
+            return Result;
+        }
+
+        /// <summary>
+        /// Metodo para ingresar a la Tabla_Descompress los valores iniciales
+        /// </summary>
+        /// <param name="Text_Compress">Entrada de texto comprimida</param>
+        /// <param name="Final_PosTable">Posición hasta la que se leerán los datos de la Metadata</param>
+        private void Get_Tabla(byte[] Text_Compress, int Final_PosTable)
+        {
+            for (int i = 1; i <= Final_PosTable; i++)
+            {
+                Registro Nuevo = new Registro() { Cadena = new byte[1] };
+                Nuevo.Cadena[0] = Text_Compress[i];
+                Nuevo.Id = i;
+                Tabla_Descompres.Add(Nuevo.Id, Nuevo);
+            }
+        }
+
+        /// <summary>
+        /// Metodo para realizar la descompresión de la entrada de Texto
+        /// </summary>
+        /// <param name="Text_Compress">Entrada de texto comprimida</param>
+        /// <param name="Position_Start">Posición a partir de la cual se leerá el texto comprimido</param>
+        /// <returns>Entrada de texto descomprimida</returns>
+        private byte[] Get_Text_Descompress(byte[] Text_Compress, int Position_Start)
+        {
+            int Cant_Bits = Text_Compress[Position_Start];
+            int aux = 0;
+            int anterior = -1;
+            string aux_binario = "";
+            byte[] Result = new byte[0];
+            for (int i = Position_Start + 1; i < Text_Compress.Length; i++)
+            {
+                aux_binario += Convert.ToString(Convert.ToInt32(Text_Compress[i]), 2).PadLeft(8, Convert.ToChar("0"));
+                while (aux_binario.Length >= Cant_Bits && anterior != 0)
+                {
+
+                    string Bits = aux_binario.Substring(0, Cant_Bits);
+                    aux_binario = aux_binario.Remove(0, Cant_Bits);
+                    aux = Convert.ToInt32(Bits, 2);
+                    if (aux != 0)
+                    {
+                        if (Tabla_Descompres.ContainsKey(aux))
+                        {
+                            int Tam = Tabla_Descompres[aux].Cadena.Length;
+                            Array.Resize(ref Result, (Result.Length + Tam));
+                            Array.Copy(Tabla_Descompres[aux].Cadena, 0, Result, Result.Length - Tam, Tam);
+
+                            if (!(anterior == -1))
+                            {
+                                Registro Nuevo = new Registro();
+                                Nuevo.Cadena = Tabla_Descompres[anterior].Cadena;
+                                Array.Resize(ref Nuevo.Cadena, (Nuevo.Cadena.Length + 1));
+                                Nuevo.Cadena[Nuevo.Cadena.Length - 1] = Tabla_Descompres[aux].Cadena[0];
+                                Nuevo.Id = Tabla_Descompres.Count + 1;
+                                Tabla_Descompres.Add(Nuevo.Id, Nuevo);
+                            }
+                        }
+                        else
+                        {
+                            Registro Nuevo = new Registro();
+                            Nuevo.Cadena = Tabla_Descompres[anterior].Cadena;
+                            Array.Resize(ref Nuevo.Cadena, (Nuevo.Cadena.Length + 1));
+                            Nuevo.Cadena[Nuevo.Cadena.Length - 1] = Tabla_Descompres[anterior].Cadena[0];
+                            Nuevo.Id = Tabla_Descompres.Count + 1;
+                            Tabla_Descompres.Add(Nuevo.Id, Nuevo);
+                            int Tam = Tabla_Descompres[aux].Cadena.Length;
+                            Array.Resize(ref Result, (Result.Length + Tam));
+                            Array.Copy(Tabla_Descompres[aux].Cadena, 0, Result, Result.Length - Tam, Tam);
+                        }
+
+                    }
+                    anterior = aux;
+                }
+            }
+            return Result;
+        }
+
+
+
+        /// <summary>
+        /// Metodo para obtener los valores de compresión
+        /// </summary>
+        /// <returns>[0] Razón compresión, [1] Factor Compresión, [2] Porcentaje Reduccion</returns>
+        public double[] Datos_Compresion()
+        {
+            double razon_compresion = Convert.ToDouble(Tam_Comprimido) / Convert.ToDouble(Tam_Original);
+            double Factor_Compresion = Convert.ToDouble(Tam_Original) / Convert.ToDouble(Tam_Comprimido);
+            double Porcentaje_Reduccion = 100 * (Convert.ToDouble((Tam_Original - Tam_Comprimido)) / Convert.ToDouble(Tam_Original));
+            return new double[3] { razon_compresion, Factor_Compresion, Porcentaje_Reduccion };
         }
     }
 }
