@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace CompressionsLibrary
 {
-    public class LZW : ICompressor
+    public class LZW : Compressor
     {
         Dictionary<byte[], Record> Tabla;
         Dictionary<int, Record> Tabla_Descompres;
@@ -173,7 +173,7 @@ namespace CompressionsLibrary
         /// </summary>
         /// <param name="CompressedText">Texto Comprimido</param>
         /// <returns>Entrada de texto Descomprimida</returns>
-        public byte[] Descompresion(byte[] CompressedText)
+        public byte[] Descompression(byte[] CompressedText)
         {
             Tabla_Descompres = new Dictionary<int, Record>();
             byte Cant_Tabla = CompressedText[0];

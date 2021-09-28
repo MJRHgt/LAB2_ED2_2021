@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Net.Http.Headers;
 using System.Threading;
-using System.Text.Json;
 using Lab2ED2.Models;
+using System.Text.Json;
 
 namespace Lab2ED2.Controllers
 {
-    [Route("api/huffman/")]
+    [Route("api/")]
     [ApiController]
-    public class HuffmanController : ControllerBase
+
+    public class LZWController : ControllerBase
     {
-        [HttpPost("compress/{name}")]
+        [HttpPost("lzw/compress/{name}")]
         public async Task<IActionResult> OnPostUploadAsync([FromForm] IFormFile file, [FromRoute] string name)
         {
             try
             {
+                Compression.DirectoryCreation();
                 var filePath = Path.GetFullPath(Directory.GetCurrentDirectory() + "\\Temp\\" + file.FileName);
                 if (file != null)
                 {
@@ -32,9 +34,9 @@ namespace Lab2ED2.Controllers
                     }
                 }
                 else { return StatusCode(500); }
-                Compression.CompressFile(filePath, file.FileName, name);
-                FileStream Sender = new FileStream(Directory.GetCurrentDirectory() + "\\Compressed\\" + name + ".huff", FileMode.OpenOrCreate);
-                return File(Sender, "text/plain", name + ".huff");
+                string FinalFile = Compression.CompressFileLZW(filePath, file.FileName, name);
+                FileStream Sender = new FileStream(FinalFile, FileMode.OpenOrCreate);
+                return File(Sender, "text/plain", name + ".lzw");
             }
             catch
             {
@@ -42,15 +44,16 @@ namespace Lab2ED2.Controllers
             }
         }
 
-        [HttpPost("decompress")]
+        [HttpPost("lzw/decompress")]
 
         public async Task<IActionResult> OnPostUploadAsync([FromForm] IFormFile file)
         {
             try
             {
+                Compression.DirectoryCreation();
                 var Extension = file.FileName.Split('.');
-                //Esto valida si no es .huff
-                if (Extension[Extension.Length - 1] != "huff")
+                //Esto valida si no es .lzw
+                if (Extension[Extension.Length - 1] != "lzw")
                 {
                     return StatusCode(500);
                 }
@@ -62,15 +65,28 @@ namespace Lab2ED2.Controllers
                         await file.CopyToAsync(stream);
                     }
                 }
-                string OriginalName = Compression.DecompressFile(filePath);
-                FileStream Sender = new FileStream(Directory.GetCurrentDirectory() + "\\Decompressed\\" + OriginalName, FileMode.OpenOrCreate);
-                return File(Sender, "text/plain", OriginalName);
+                var OriginalName = Compression.DecompressFileLZW(filePath);
+                FileStream Sender = new FileStream(OriginalName[1], FileMode.OpenOrCreate);
+                return File(Sender, "text/plain", OriginalName[0]);
             }
             catch
             {
                 return StatusCode(500);
             }
 
+        }
+
+        [HttpGet("compressions")]
+
+        public ActionResult GetCompressionsJSON()
+        {
+            Compression.DirectoryCreation();
+            var Registries = Compression.GetAllCompressions();
+            if (Registries != null)
+            {
+                return Created("", Registries);
+            }
+            return StatusCode(500);
         }
     }
 }
