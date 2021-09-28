@@ -1,6 +1,11 @@
-# Lab 2 de Estructura de Datos (Compresión de Huffman)
+# Lab 2 de Estructura de Datos (Compresión de Huffman) y lab 3 LZW
 
 -----------------------------
+
+## RAMAS
+
+- Main, Compresion de Huffman - Lab2
+- LZW, LZW - Lab 3
 
 ## Construido con 🛠️
 
