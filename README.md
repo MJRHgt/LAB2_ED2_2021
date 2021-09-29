@@ -1,6 +1,20 @@
-# Lab 2 de Estructura de Datos (Compresión de Huffman)
+# Laboratorio 3 de Estructura de Datos II (Compresión LZW)
 
 -----------------------------
+## Rutas:
+
+*POST*
+
+- /api/lzw/compress/{compressedFileName}
+- /api/lzw/decompress
+
+- /api/huffman/compress/{compressedFileName}
+- /api/huffman/decompress
+
+*GET*
+
+- /api/compressions
+
 
 ## Construido con 🛠️
 
@@ -10,19 +24,19 @@
 
 ## Objetivos:
 
-- Aplicar los conceptos de la codificación de Huffman
+- Aplicar los conceptos de la compresión LZW
 - Aplicar los conceptos de razones de compresión
 
 ### Pre-requisitos 📋
 
-- *Tener PostMan y Visual Studio 2019*
-- *Clonar el Repositorio en la rama main*
+- *Tener Postman y Visual Studio 2019*
+- *Clonar el Repositorio en la rama LZW*
 
 ## Ejecutando las pruebas ⚙️
 
-- **Desde visual studio 2019**
-- **Peticiones de JSon, enviadas desde POSTMAN**
-- **Se proporciona un archivo y se crea un .huffman**
+- **Desde Visual Studio 2019**
+- **Peticiones de Json, enviadas desde Postman**
+- **Se proporciona un archivo y se crea un .LZW**
 
 ## Autores ✒️
 
