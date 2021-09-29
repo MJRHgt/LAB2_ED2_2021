@@ -11,8 +11,8 @@ namespace ConsoleAppLAB2
         public static void Header()
         {
             Console.Clear();
-            string textToEnter = "--PRÁCTICA DE LABORATORIO #2 - ESTRUCTURA DE DATOS 2--";
-            string textToEnter2 = "----- Javier Andrés Morales González - 1210219 | Mario Jose Roldan  Hernandez - 1117517 -----";
+            string textToEnter = "--PRÁCTICA DE LABORATORIO #3 - ESTRUCTURA DE DATOS 2--";
+            string textToEnter2 = "----- Javier Andrés Morales González - 1210219 | Mario José Roldán  Hernández - 1117517 -----";
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (textToEnter.Length / 2)) + "}", textToEnter));
             Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (textToEnter2.Length / 2)) + "}", textToEnter2));
@@ -35,77 +35,186 @@ namespace ConsoleAppLAB2
             Console.ResetColor();
         }
 
+        public static void TitleOption3()
+        {
+            string t = "--COMPRESIÓN LZW--";
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (t.Length / 2)) + "}", t) + "\n");
+            Console.ResetColor();
+        }
+        public static void TitleOption4()
+        {
+            string t = "--DESCOMPRESIÓN LZW--";
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (t.Length / 2)) + "}", t) + "\n");
+            Console.ResetColor();
+        }
+
 
         static void Main(string[] args)
         {
+            LZW CompresorLZW = new LZW();
             Huffman CompresorCrack = new Huffman();
             Header();
-            TitleOption1();
             bool exit = false;
             while (!exit)
             {
                 try
                 {
-                    Header();
-                    TitleOption1();
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Ingrese el texto a comprimir:\n\n");
+                    Console.WriteLine("Ingrese H para dirigirse al método Huffman o ingrese L para dirigirse al método LZW:\n\n");
                     Console.ResetColor();
-                    string Text = Console.ReadLine();
-                    if (String.IsNullOrEmpty(Text))
+                    string Selected = Console.ReadLine();
+                    if (String.IsNullOrEmpty(Selected))
                     {
                         throw new FormatException();
                     }
-                    byte[] texto = new byte[Text.Length];
-                    for (int i = 0; i < Text.Length; i++)
+                    if (Selected.Equals("H") || Selected.Equals("h"))
                     {
-                        texto[i] = Convert.ToByte(Convert.ToChar(Text[i]));
+                        try
+                        {
+                            Header();
+                            TitleOption1();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Ingrese el texto a comprimir:\n\n");
+                            Console.ResetColor();
+                            string Text = Console.ReadLine();
+                            if (String.IsNullOrEmpty(Text))
+                            {
+                                throw new FormatException();
+                            }
+                            byte[] texto = new byte[Text.Length];
+                            for (int i = 0; i < Text.Length; i++)
+                            {
+                                texto[i] = Convert.ToByte(Convert.ToChar(Text[i]));
+                            }
+                            byte[] Comprimido = CompresorCrack.Compression(texto);
+                            string result = "";
+                            foreach (byte bit in Comprimido)
+                            {
+                                result += Convert.ToString(Convert.ToChar(bit));
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nEl texto comprimido es el siguiente:\n\n");
+                            Console.ResetColor();
+                            Console.WriteLine(result);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nPresione cualquier tecla para ver el mismo texto descompreso.");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            Console.Clear();
+                            Header();
+                            TitleOption2();
+                            result = "";
+                            byte[] Descomprimido = CompresorCrack.Descompression(Comprimido);
+                            foreach (byte bit in Descomprimido)
+                            {
+                                result += Convert.ToString(Convert.ToChar(bit));
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nEl texto descomprimido es el siguiente:");
+                            Console.ResetColor();
+                            Console.WriteLine("\n" + result + "\n\n");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Proceso finalizado. Presione una tecla.");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            Header();
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            string e = "Ingrese S para volver al menú principal o cualquier cosa para salir del programa.";
+                            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
+                            Console.ResetColor();
+                            if (!Convert.ToString(Console.ReadLine()).Equals("S"))
+                            {
+                                exit = true;
+                            }
+                        }
+                        catch
+                        {
+                            Header();
+                            string e = "Ocurrió un error. Presione una tecla para volver al menú principal.";
+                            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
+                            Console.ReadKey();
+                        }
                     }
-                    byte[] Comprimido = CompresorCrack.Compression(texto);
-                    string result = "";
-                    foreach (byte bit in Comprimido)
+                    else if (Selected.Equals("L") || Selected.Equals("l"))
                     {
-                        result += Convert.ToString(Convert.ToChar(bit));
+                        try
+                        {
+                            Header();
+                            TitleOption3();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+
+                            Console.WriteLine("Ingrese el texto a comprimir:\n\n");
+                            Console.ResetColor();
+                            string Text = Console.ReadLine();
+                            if (String.IsNullOrEmpty(Text))
+                            {
+                                throw new FormatException();
+                            }
+                            byte[] texto = new byte[Text.Length];
+                            for (int i = 0; i < Text.Length; i++)
+                            {
+                                texto[i] = Convert.ToByte(Convert.ToChar(Text[i]));
+                            }
+                            byte[] Comprimido = CompresorLZW.Compression(texto);
+                            string result = "";
+                            foreach (byte bit in Comprimido)
+                            {
+                                result += Convert.ToString(Convert.ToChar(bit));
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nEl texto comprimido es el siguiente:\n\n");
+                            Console.ResetColor();
+                            Console.WriteLine(result);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nPresione cualquier tecla para ver el mismo texto descompreso.");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            Console.Clear();
+                            Header();
+                            TitleOption4();
+                            result = "";
+                            byte[] Descomprimido = CompresorLZW.Descompression(Comprimido);
+                            foreach (byte bit in Descomprimido)
+                            {
+                                result += Convert.ToString(Convert.ToChar(bit));
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\n\nEl texto descomprimido es el siguiente:");
+                            Console.ResetColor();
+                            Console.WriteLine("\n" + result + "\n\n");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Proceso finalizado. Presione una tecla.");
+                            Console.ResetColor();
+                            Console.ReadKey();
+                            Header();
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            string e = "Ingrese S para volver al menú principal o cualquier cosa para salir del programa.";
+                            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
+                            Console.ResetColor();
+                            if (!Convert.ToString(Console.ReadLine()).Equals("S"))
+                            {
+                                exit = true;
+                            }
+                        }
+                        catch
+                        {
+                            Header();
+                            string e = "Ocurrió un error. Presione una tecla para volver al menú principal.";
+                            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
+                            Console.ReadKey();
+                        }
                     }
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n\nEl texto comprimido es el siguiente:\n\n");
-                    Console.ResetColor();
-                    Console.WriteLine(result);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n\nPresione cualquier tecla para ver el mismo texto descompreso.");
-                    Console.ResetColor();
-                    Console.ReadKey();
-                    Console.Clear();
-                    Header();
-                    TitleOption2();
-                    result = "";
-                    byte[] Descomprimido = CompresorCrack.Descompression(Comprimido);
-                    foreach (byte bit in Descomprimido)
+                    else
                     {
-                        result += Convert.ToString(Convert.ToChar(bit));
-                    }
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n\nEl texto descomprimido es el siguiente:");
-                    Console.ResetColor();
-                    Console.WriteLine("\n" + result + "\n\n");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Proceso finalizado. Presione una tecla.");
-                    Console.ResetColor();
-                    Console.ReadKey();
-                    Header();
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    string e = "Ingrese S para volver a comprimir o cualquier cosa para salir del programa.";
-                    Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
-                    Console.ResetColor();
-                    if (!Convert.ToString(Console.ReadLine()).Equals("S"))
-                    {
-                        exit = true;
+                        throw new FormatException();
                     }
                 }
                 catch
                 {
                     Header();
-                    string e = "Ocurrió un error. Presione una tecla para volver a comprimir.";
+                    string e = "Ocurrió un error. Presione una tecla para volver a la selección.";
                     Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (e.Length / 2)) + "}", e) + "\n");
                     Console.ReadKey();
                 }
